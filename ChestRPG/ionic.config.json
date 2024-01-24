@@ -1,0 +1,7 @@
+{
+  "name": "ChestRPG",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
