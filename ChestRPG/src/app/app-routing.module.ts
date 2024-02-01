@@ -16,9 +16,23 @@ const routes: Routes = [
     loadChildren: () => import('./page/cadastro/cadastro.module').then( m => m.CadastroPageModule)
   },
   {
-    path: 'home',
-    loadChildren: () => import('./page/home/home.module').then( m => m.HomePageModule)
-  }
+    path: 'mesas',
+    loadChildren: () => import('./page/mesas/home.module').then( m => m.HomePageModule)
+  },  {
+    path: 'sobre',
+    loadChildren: () => import('./page/sobre/sobre.module').then( m => m.SobrePageModule)
+  },
+  {
+    path: 'politica',
+    loadChildren: () => import('./page/politica/politica.module').then( m => m.PoliticaPageModule)
+  },
+  {
+    path: 'atualizacoes',
+    loadChildren: () => import('./page/atualizacoes/atualizacoes.module').then( m => m.AtualizacoesPageModule)
+  },
+
+  
+  
 ];
 
 @NgModule({
