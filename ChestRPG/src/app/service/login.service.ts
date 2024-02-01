@@ -1,9 +1,32 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
 
-  constructor() { }
+  private apiUrl = 'http://localhost/ChestRPGIonic/api/api_usuario.php';
+
+  constructor(private http: HttpClient) { }
+
+  getUserById(id: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/usuario/${id}`);
+  }
+
+  registerUser(user: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/usuario`, user);
+  }
+
+  loginUser(username: string, password: string): Observable<any> {
+    const loginData = {
+      usernameUser: username,
+      passwordUser: password
+    };
+  
+    return this.http.post(`${this.apiUrl}/usuario`, loginData);
+  }
+
+  // Adicione mais métodos conforme necessário
 }
