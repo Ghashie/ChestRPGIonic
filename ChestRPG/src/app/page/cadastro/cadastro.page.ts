@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { LoginService } from 'src/app/service/login.service';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -9,24 +9,32 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./cadastro.page.scss'],
 })
 export class CadastroPage {
-  userData = {
-    username: '',
-    email: '',
-    password: '',
-  };
-
+  
+    username: string = '';
+    email: string = '';
+    password: string = '';
+  
   constructor(private loginService: LoginService, private router: Router, private http: HttpClient) {}
 
   register() {
-    this.http.post('http://localhost/ChestRPGIonic/api/api_usuario.php', this.userData).subscribe(
-      (response) => {
-        console.log('Cadastro realizado com sucesso!', response);
-        // Adicione lógica de navegação ou outra ação após o cadastro
+    const userData = {
+      username: this.username,
+      email: this.email,
+      password: this.password,
+    }
+
+    this.http.post('http://localhost/ChestRPGIonic/api/api_usuario.php', userData).subscribe(response => {
+      console.log(response);
+
+      if (response && response.hasOwnProperty('idUser')) {
+        // Se o usuário foi retornado, o cadastro foi bem-sucedido
         this.router.navigate(['/login']);
-      },
-      (error) => {
-        console.error('Erro no cadastro:', error);
+      } else {
+        // Se o usuário não foi retornado, algo inesperado aconteceu
+        console.error('Erro no cadastro:', response);
       }
-    );
+    }, error => {
+      console.error('Erro na requisição:', error);
+    });
   }
 }

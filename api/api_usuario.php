@@ -2,6 +2,13 @@
 require_once 'headers.php';
 require_once 'conexao.php';
 
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: POST, GET, PUT, DELETE, OPTIONS');
+    header('Access-Control-Allow-Headers: Origin, Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
+    exit();
+}
+
 date_default_timezone_set('America/Sao_Paulo');
 @session_start();
 
@@ -37,14 +44,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents("php://input"));
 
     // Use prepared statements para evitar SQL injection
-    $stmt = $con->prepare("INSERT INTO users (usernameUser, emailUser, passwordUser) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $data->nome, $data->email, $data->password);
+    $stmt = $con->prepare("INSERT INTO user (usernameUser, emailUser, passwordUser) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $data->username, $data->email, $data->password);
 
     if ($stmt->execute()) {
-        $data->id = $con->insert_id;
+        $data->idUser = $con->insert_id;
+        http_response_code(201); // Código de status 201 (Created) para indicar sucesso no cadastro
         exit(json_encode($data));
     } else {
-        exit(json_encode(['status' => 'Deu ruim']));
+        http_response_code(500); // Código de status 500 (Internal Server Error) para indicar falha no servidor
+        exit(json_encode(['error' => 'Deu ruim no cadastro']));
     }
 }
 
@@ -79,6 +88,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
 }
 
 // Se chegou aqui, a requisição não corresponde a nenhum método esperado
-http_response_code(400);
-exit(json_encode(['status' => 'Requisição inválida']));
-?>
+if ($stmt->execute()) {
+    $data->id = $con->insert_id;
+    http_response_code(201); // Código de status 201 (Created) para indicar sucesso no cadastro
+    exit(json_encode($data));
+} else {
+    http_response_code(500); // Código de status 500 (Internal Server Error) para indicar falha no servidor
+    exit(json_encode(['status' => 'Deu ruim']));
+}
+

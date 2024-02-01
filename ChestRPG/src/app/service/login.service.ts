@@ -12,7 +12,7 @@ export class LoginService {
   constructor(private http: HttpClient) { }
 
   getUserById(id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/usuario/${id}`);
+    return this.http.get(`${this.apiUrl}/user/${id}`);
   }
 
   registerUser(user: any): Observable<any> {

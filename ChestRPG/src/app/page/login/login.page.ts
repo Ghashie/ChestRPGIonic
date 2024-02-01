@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from 'src/app/service/login.service';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,26 +9,23 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage {
-  loginData = {
-    username: '',
-    password: '',
-  };
+  username: string = '';
+  password: string = '';
 
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(private loginService: LoginService, private router: Router, private http: HttpClient) {}
 
   login() {
-    this.loginService
-      .loginUser(this.loginData.username, this.loginData.password)
-      .subscribe(
-        (response) => {
-          console.log('Usuário logado com sucesso:', response);
-          // Redirecionar para a página principal ou outra página desejada
-          this.router.navigate(['/home']);
-        },
-        (error) => {
-          console.error('Erro ao fazer login:', error);
-          // Lógica para exibir mensagem de erro ao usuário
-        }
-      );
+    const loginData = {
+      username: this.username,
+      password: this.password,
+    };
+    this.http.get(`http://localhost/user?usernameUser=${loginData.username}`).subscribe(response => {
+      console.log(response);
+      this.router.navigate(['/home']);
+    }, error => {
+      console.error(error);
+    });
   }
+
+
 }
