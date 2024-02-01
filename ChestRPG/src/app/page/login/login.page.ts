@@ -19,7 +19,7 @@ export class LoginPage {
       username: this.username,
       password: this.password,
     };
-    this.http.get(`http://localhost/user?usernameUser=${loginData.username}`).subscribe(response => {
+    this.http.get(`http://localhost/ChestRPGIonic/api/api_usuario.php?usernameUser=${loginData.username}`).subscribe(response => {
       console.log(response);
       this.router.navigate(['/home']);
     }, error => {
