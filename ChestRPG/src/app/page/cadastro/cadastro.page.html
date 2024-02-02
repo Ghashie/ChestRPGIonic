@@ -9,18 +9,15 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-item>
-    <ion-label position="floating">Username</ion-label>
-    <ion-input [(ngModel)]="username" name="username" type="text"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Email</ion-label>
-    <ion-input [(ngModel)]="email" name="email" type="email"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Password</ion-label>
-    <ion-input [(ngModel)]="password" name="password" type="password"></ion-input>
-  </ion-item>
-  <ion-button expand="full" (click)="register()">Cadastrar</ion-button>
-  
+  <div class="login-page">
+    <div class="form">
+      <form class="login-form">
+        <input [(ngModel)]="username" name="username" type="text" placeholder="Nome de usuário"/>
+        <input [(ngModel)]="email" name="email" type="text" placeholder="Email"/>
+        <input [(ngModel)]="password" name="password" type="password" placeholder="Senha"/>
+        
+        <button (click)="register()">create</button>
+      </form>
+    </div>
+  </div>
 </ion-content>

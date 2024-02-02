@@ -6,14 +6,14 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-item>
-    <ion-label position="floating">Username</ion-label>
-    <ion-input [(ngModel)]="username" name="username" type="text"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Password</ion-label>
-    <ion-input [(ngModel)]="password" name="password" type="password"></ion-input>
-  </ion-item>
-  <ion-button expand="full" (click)="login()">Login</ion-button>
-  <ion-button routerLink="/cadastro" expand="full">Cadastrar</ion-button>
+  <div class="login-page">
+    <div class="form">
+      <form class="login-form">
+        <input [(ngModel)]="email" name="email" type="text" placeholder="Email"/>
+        <input  [(ngModel)]="password" name="password" type="password" placeholder="Senha"/>
+        <button (click)="login()">login</button>
+        <p class="message">Não tem conta? <a routerLink="/cadastro">Criar conta</a></p>
+      </form>
+    </div>
+  </div>
 </ion-content>
