@@ -45,5 +45,9 @@ export class CriarPage implements OnInit {
     }
   }
 
+  closeModal() {
+    this.modalController.dismiss();
+  }
+
 
 }

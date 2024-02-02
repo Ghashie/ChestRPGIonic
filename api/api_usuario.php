@@ -2,15 +2,8 @@
 require_once 'headers.php';
 require_once 'conexao.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    header('Access-Control-Allow-Origin: *');
-    header('Access-Control-Allow-Methods: POST, GET, PUT, DELETE, OPTIONS');
-    header('Access-Control-Allow-Headers: Origin, Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
-    exit();
-}
-
 date_default_timezone_set('America/Sao_Paulo');
-@session_start();
+session_start();
 
 // Verifique se a conexão foi estabelecida corretamente
 if ($con->connect_error) {
@@ -33,7 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         // Verifica a senha usando password_verify
         if ($data && isset($_GET['passwordUser'])) {
             if (password_verify($_GET['passwordUser'], $data['passwordUser'])) {
-                exit(json_encode($data));
+                $_SESSION['idUser'] = $data['idUser'];
+                exit(json_encode(['idUser' => $data['idUser']])); // Retorna o ID do usuário
             } else {
                 http_response_code(401); // Unauthorized
                 exit(json_encode(['error' => 'Credenciais inválidas']));
@@ -74,6 +68,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($stmt->execute()) {
         $data->idUser = $con->insert_id;
+
+        // Defina o ID do usuário na variável de sessão
+        $_SESSION['idUser'] = $data->idUser;
+
         http_response_code(201); // Código de status 201 (Created) para indicar sucesso no cadastro
         exit(json_encode($data));
     } else {
