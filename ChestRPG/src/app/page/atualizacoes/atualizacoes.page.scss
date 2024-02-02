@@ -1,0 +1,62 @@
+ion-header {
+    ion-toolbar {
+      --background: #34495E;
+    }
+  
+    ion-title {
+      font-family: 'MedievalSharp', cursive;
+      color: white;
+     padding-left: 100px;
+    }
+  
+    ion-menu-button {
+      --color: white;
+    }
+  }
+  
+  ion-content {
+    --background: #252730;
+  
+    .container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px; /* Distância entre 'Atualizações' e o restante do conteúdo */
+      padding-left: 20px;
+    }
+  
+    h1.title {
+      font-family: 'Inconsolata', monospace;
+      color: white;
+      text-align: center;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+  
+    h3.subtitle {
+      font-family: 'Inconsolata', monospace;
+      color: white;
+      margin-top: 15px;
+      padding-left: 20px;
+    }
+  
+    p.content {
+      color: white;
+      margin-bottom: 15px;
+      padding-left: 20px;
+    }
+  
+    ul.list {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      padding-left: 20px;
+  
+      li.item {
+        font-family: 'Inconsolata', monospace;
+        color: white;
+        padding-left: 20px;
+       
+      }
+    }
+  }
+  

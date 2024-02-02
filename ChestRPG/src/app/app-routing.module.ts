@@ -18,10 +18,8 @@ const routes: Routes = [
   {
     path: 'mesas',
     loadChildren: () => import('./page/mesas/home.module').then( m => m.HomePageModule)
-  },  {
-    path: 'sobre',
-    loadChildren: () => import('./page/sobre/sobre.module').then( m => m.SobrePageModule)
   },
+ 
   {
     path: 'politica',
     loadChildren: () => import('./page/politica/politica.module').then( m => m.PoliticaPageModule)
@@ -29,7 +27,11 @@ const routes: Routes = [
   {
     path: 'atualizacoes',
     loadChildren: () => import('./page/atualizacoes/atualizacoes.module').then( m => m.AtualizacoesPageModule)
+  },  {
+    path: 'perfil',
+    loadChildren: () => import('./page/perfil/perfil.module').then( m => m.PerfilPageModule)
   },
+
 
   
   
