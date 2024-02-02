@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoginService } from 'src/app/service/login.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -9,23 +10,53 @@ import { Router } from '@angular/router';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage {
-  username: string = '';
+  email: string = '';
   password: string = '';
 
-  constructor(private loginService: LoginService, private router: Router, private http: HttpClient) {}
-
-  login() {
-    const loginData = {
-      username: this.username,
-      password: this.password,
-    };
-    this.http.get(`http://localhost/ChestRPGIonic/api/api_usuario.php?usernameUser=${loginData.username}`).subscribe(response => {
-      console.log(response);
-      this.router.navigate(['/home']);
-    }, error => {
-      console.error(error);
+  constructor(private toastController: ToastController, private router: Router, private http: HttpClient) {}
+ 
+  async presentToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      position: 'bottom',
     });
+    toast.present();
   }
 
+  login() {
+    // Verifica se todos os campos foram preenchidos
+    if (!this.email || !this.password) {
+      this.presentToast('Todos os campos são obrigatórios.');
+      return;
+    }
+  
+    // Requisição para verificar o login
+    const loginData = {
+      emailUser: this.email,
+      passwordUser: this.password,
+    };
+  
+    this.http.get(`http://localhost/ChestRPGIonic/api/api_usuario.php?emailUser=${loginData.emailUser}&passwordUser=${loginData.passwordUser}`).subscribe(
+      (response: any) => {
+        // Verifica se a resposta está vazia (nenhum usuário encontrado)
+        if (!response) {
+          this.presentToast('Nenhum usuário encontrado. Verifique seu e-mail e senha.');
+          return;
+        }
+  
+        // Verifica se a senha fornecida coincide com a senha armazenada (usando password_verify)
+        if (response && response.error) {
+          this.presentToast('Credenciais inválidas. Verifique seu e-mail e senha.');
+        } else {
+          this.router.navigate(['/mesas']);
+        }
+      },
+      (error) => {
+        console.error(error);
+        this.presentToast('Erro ao realizar o login. Tente novamente.');
+      }
+    );
+  }
 
 }

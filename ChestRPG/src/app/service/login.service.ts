@@ -28,5 +28,11 @@ export class LoginService {
     return this.http.post(`${this.apiUrl}/usuario`, loginData);
   }
 
+  logout(): void {
+    // Implemente a lógica de logout aqui
+    // Por exemplo, remova tokens, limpe dados de sessão, etc.
+    // Certifique-se de ajustar a lógica conforme a necessidade do seu aplicativo.
+  }
+
   // Adicione mais métodos conforme necessário
 }

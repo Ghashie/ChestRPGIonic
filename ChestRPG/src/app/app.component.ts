@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { MenuController } from '@ionic/angular';
-import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -9,29 +8,22 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent {
-  public appPages = [
-    { title: 'Inbox', url: '/folder/inbox', icon: 'mail' },
-    { title: 'Outbox', url: '/folder/outbox', icon: 'paper-plane' },
-    { title: 'Favorites', url: '/folder/favorites', icon: 'heart' },
-    { title: 'Archived', url: '/folder/archived', icon: 'archive' },
-    { title: 'Trash', url: '/folder/trash', icon: 'trash' },
-    { title: 'Spam', url: '/folder/spam', icon: 'warning' },
-  ];
 
-  public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-
-  constructor(private menuController: MenuController, private router: Router) {
-    // Monitorar alterações de rota para atualizar a classe "active"
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe(() => {
-      this.updateActiveState();
-    });
-  }
+  constructor(private menuController: MenuController, private router: Router) {}
 
   closeMenuAndNavigate(route: string): void {
     this.menuController.close('main-menu');  // Fechar o menu
     this.router.navigate([route]);  // Navegar para a rota desejada
+  }
+
+  logout(): void {
+    // Implemente a lógica de logout aqui
+    // Por exemplo, limpar dados de sessão, redirecionar para a página de login, etc.
+    // Exemplo de redirecionamento para a página de login
+    this.router.navigate(['/login']);
+
+    // Feche o menu após o logout
+    this.menuController.close('main-menu');
   }
 
   private updateActiveState(): void {

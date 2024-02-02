@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { HomePageRoutingModule } from './home-routing.module';
+import { JuntarPageRoutingModule } from './juntar-routing.module';
 
-import { HomePage } from './home.page';
+import { JuntarPage } from './juntar.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    HomePageRoutingModule
+    JuntarPageRoutingModule
   ],
-  declarations: [HomePage]
+  declarations: [JuntarPage]
 })
-export class HomePageModule {}
+export class JuntarPageModule {}

@@ -30,6 +30,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $email = $con->real_escape_string($_GET['emailUser']);
         $sql = $con->query("SELECT * FROM user WHERE emailUser = '$email'");
         $data = $sql->fetch_assoc();
+        // Verifica a senha usando password_verify
+        if ($data && isset($_GET['passwordUser'])) {
+            if (password_verify($_GET['passwordUser'], $data['passwordUser'])) {
+                exit(json_encode($data));
+            } else {
+                http_response_code(401); // Unauthorized
+                exit(json_encode(['error' => 'Credenciais inválidas']));
+            }
+        }
     } else {
         $sql = $con->query("SELECT * FROM user");
         $data = [];
@@ -43,9 +52,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents("php://input"));
 
+    // Verifica se os campos obrigatórios estão preenchidos
+    if (empty($data->username) || empty($data->email) || empty($data->password)) {
+        http_response_code(400); // Código de status 400 (Bad Request) para indicar que há campos nulos
+        exit(json_encode(['error' => 'Campos obrigatórios não preenchidos']));
+    }
+
+    // Verifica se o e-mail já está cadastrado
+    $email = $con->real_escape_string($data->email);
+    $sql = $con->query("SELECT * FROM user WHERE emailUser = '$email'");
+    $existingUser = $sql->fetch_assoc();
+    if ($existingUser) {
+        http_response_code(400); // Código de status 400 (Bad Request) para indicar que o e-mail já está cadastrado
+        exit(json_encode(['error' => 'E-mail já cadastrado']));
+    }
+
     // Use prepared statements para evitar SQL injection
     $stmt = $con->prepare("INSERT INTO user (usernameUser, emailUser, passwordUser) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $data->username, $data->email, $data->password);
+    $hashedPassword = password_hash($data->password, PASSWORD_DEFAULT);
+    $stmt->bind_param("sss", $data->username, $data->email, $hashedPassword);
 
     if ($stmt->execute()) {
         $data->idUser = $con->insert_id;
@@ -58,8 +83,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
-    if (isset($_GET['idUser'])) {
-        $id = $con->real_escape_string($_GET['idUser']);
+    parse_str(file_get_contents("php://input"), $putData);
+
+    if (isset($putData['idUser'])) {
+        $id = $con->real_escape_string($putData['idUser']);
         $data = json_decode(file_get_contents("php://input"));
 
         // Use prepared statements para evitar SQL injection
