@@ -1,13 +1,23 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>juntar</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/mesas"></ion-back-button>
+    </ion-buttons>
+    <ion-title>ChestRPG</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">juntar</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <h1 class="title">Junte-se à uma Mesa</h1>
+
+  <ion-card>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="floating">Código da Mesa</ion-label>
+        <ion-input [(ngModel)]="codeTable" type="text"></ion-input>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-button expand="full" (click)="joinMesa()">Juntar-se à Mesa</ion-button>
 </ion-content>

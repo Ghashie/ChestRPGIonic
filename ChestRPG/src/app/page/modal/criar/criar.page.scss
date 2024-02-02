@@ -1,0 +1,38 @@
+ion-header {
+    ion-toolbar {
+      --background: #34495E;
+    }
+  
+    ion-title {
+      font-family: 'MedievalSharp', cursive;
+      color: white;
+      padding-left: 100px;
+    }
+  
+    ion-back-button {
+      --color: white;
+    }
+  }
+  ion-content {
+    --background: #252730;
+    display: flex;
+    align-items: center;
+  .title{
+    font-family: 'Inconsolata', monospace;
+    color: white;
+    text-align: center;
+  }
+  ion-card{
+    margin-top: 120px;
+    ion-card-content{
+     border-radius: 40px;
+    }
+  }
+  
+    ion-button {
+      --background: #34495E;
+      width: 80%; // Ajustar a largura conforme necessário
+      margin: 0 auto; // Centralizar na horizontal
+     
+    }
+  }
