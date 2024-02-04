@@ -37,7 +37,7 @@ export class LoginPage {
       passwordUser: this.password,
     };
   
-    this.http.get(`http://localhost/ChestRPGIonic/api/api_usuario.php?emailUser=${loginData.emailUser}&passwordUser=${loginData.passwordUser}`).subscribe(
+    this.http.get(`http://localhost/ChestRPGIonic/api/login.php?emailUser=${loginData.emailUser}&passwordUser=${loginData.passwordUser}`).subscribe(
       (response: any) => {
         // Verifica se a resposta está vazia (nenhum usuário encontrado)
         if (!response) {

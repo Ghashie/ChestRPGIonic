@@ -38,6 +38,10 @@ const routes: Routes = [
     path: 'mesas',
     loadChildren: () => import('./page/mesas/mesas.module').then( m => m.MesasPageModule)
   },
+  {
+    path: 'dentro-mesa',
+    loadChildren: () => import('./page/dentro-mesa/dentro-mesa.module').then( m => m.DentroMesaPageModule)
+  },
 
 
 ];

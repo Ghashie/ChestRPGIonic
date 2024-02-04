@@ -8,28 +8,33 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <!-- Seu conteúdo existente aqui -->
-
   <!-- Botão para abrir o modal de criar mesa -->
-  
-  
-    <div class="container">
-      <h1 class="title">Mesas</h1>
-      <div class ="btn-mesas">
-        <ion-button (click)="openCriarModal()">Criar Mesa</ion-button>
-
+  <div class="container">
+    <h1 class="title">Mesas</h1>
+    <div class="btn-mesas">
+      <ion-button (click)="openCriarModal()">Criar Mesa</ion-button>
       <!-- Botão para abrir o modal de juntar-se à mesa -->
       <ion-button (click)="openJuntarModal()">Juntar-se à Mesa</ion-button>
-      </div>
-      
-
     </div>
-  
-      
-    
-      
- 
-    
-    
-  </ion-content>
 
+    <!-- Lista de mesas -->
+    <ion-list>
+      <ion-card *ngFor="let mesa of mesas">
+        <ion-card-header>
+          <ion-card-title>{{ mesa.nameTable }}</ion-card-title>
+          <ion-card-subtitle>{{ mesa.descriptionTable }}</ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content>
+          Código: {{ mesa.codeTable }}
+        </ion-card-content>
+
+        <!-- Botões conforme o papel do usuário na mesa -->
+        <ion-button *ngIf="mesa.isCreator" (click)="editarMesa(mesa)">Editar</ion-button>
+        <ion-button (click)="entrarNaMesa(mesa)">Entrar</ion-button>
+        <ion-button *ngIf="mesa.isMember" (click)="sairDaMesa(mesa)">Sair</ion-button>
+        <ion-button *ngIf="mesa.isCreator" (click)="excluirMesa(mesa)">Excluir</ion-button>
+      </ion-card>
+    </ion-list>
+  </div>
+</ion-content>

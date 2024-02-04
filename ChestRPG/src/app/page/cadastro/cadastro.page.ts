@@ -23,7 +23,7 @@ export class CadastroPage {
       password: this.password,
     }
 
-    this.http.post('http://localhost/ChestRPGIonic/api/api_usuario.php', userData).subscribe(response => {
+    this.http.post('http://localhost/ChestRPGIonic/api/cadastro.php', userData).subscribe(response => {
       console.log(response);
 
       if (response && response.hasOwnProperty('idUser')) {
