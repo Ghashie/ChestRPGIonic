@@ -12,7 +12,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 date_default_timezone_set('America/Sao_Paulo');
 @session_start();
 
-if (!isset($_SESSION['idUser'])) {
-  http_response_code(401); // Unauthorized
-  exit(json_encode(['error' => 'Usuário não autenticado']));
-}
+http_response_code(404); // Not Found
+exit(json_encode(['status' => 'Endpoint Not Found']));

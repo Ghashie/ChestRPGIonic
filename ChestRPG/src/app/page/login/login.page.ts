@@ -49,7 +49,6 @@ export class LoginPage {
         if (response && response.error) {
           this.presentToast('Credenciais inválidas. Verifique seu e-mail e senha.');
         } else {
-          sessionStorage.setItem('currentUser', JSON.stringify(response));
           this.router.navigate(['/mesas']);
         }
       },
