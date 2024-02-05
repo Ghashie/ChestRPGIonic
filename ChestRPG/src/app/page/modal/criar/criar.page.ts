@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { TablesService } from 'src/app/service/tables.service'; // Certifique-se de ajustar o caminho correto
+import { TablesService } from 'src/app/service/tables.service';
 import { ToastController } from '@ionic/angular';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-criar',
@@ -14,7 +13,7 @@ export class CriarPage implements OnInit {
   descriptionTable: string = '';
   passwordTable: string = '';
 
-  constructor(private modalController: ModalController, private http: HttpClient, private toastController: ToastController,private tablesService: TablesService) {}
+  constructor(private modalController: ModalController, private tablesService: TablesService, private toastController: ToastController) { }
 
   async presentToast(message: string) {
     const toast = await this.toastController.create({
@@ -24,7 +23,7 @@ export class CriarPage implements OnInit {
     toast.present();
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   criarMesa() {
     const tableData = {
@@ -33,17 +32,20 @@ export class CriarPage implements OnInit {
       passwordTable: this.passwordTable,
     };
 
-    // Verifica se todas as informações foram fornecidas
     if (!tableData.nameTable || !tableData.descriptionTable || !tableData.passwordTable) {
       this.presentToast('Por favor, preencha todos os campos');
       return;
-    } else {
-      this.tablesService.createTable(tableData).subscribe((response) => {
-        // Lógica após a criação da mesa (pode ser redirecionamento, atualização da lista de mesas, etc.)
-        this.modalController.dismiss(); // Fechar o modal após a criação da mesa
-      });
     }
+
+    this.tablesService.createTable(tableData).subscribe(
+      (response) => {
+        this.presentToast('Mesa criada com sucesso');
+        this.modalController.dismiss();
+      },
+      (error) => {
+        console.error(error);
+        this.presentToast('Erro ao criar a mesa. Tente novamente.');
+      }
+    );
   }
-
-
 }

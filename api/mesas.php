@@ -1,4 +1,5 @@
 <?php
+session_start();
 header("Access-Control-Allow-Origin: http://localhost:8100");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
@@ -9,8 +10,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-
-session_start();
 require_once 'headers.php';
 require_once 'conexao.php';
 
@@ -40,6 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
 
     $data = json_decode(file_get_contents("php://input"));
+    // Adiciona o ID do administrador à mesa antes de inserir no banco de dados
+    $data->idAdmin = $idAdmin;
 
     if (empty($data->nameTable) || empty($data->descriptionTable) || empty($data->passwordTable)) {
         http_response_code(400);
@@ -91,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             exit(json_encode(['status' => 'Deu ruim']));
         }
     }
-} else {
+}  else {
     http_response_code(404);
     exit(json_encode(['status' => 'Endpoint Not Found']));
 }

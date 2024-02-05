@@ -12,12 +12,7 @@ export class TablesService {
   constructor(private http: HttpClient) { }
 
   getTables(): Observable<any> {
-    return this.http.get('http://localhost/ChestRPGIonic/api/mesas.php', { withCredentials: true })
-    .subscribe(data => {
-      // Processar a resposta
-    }, error => {
-      // Lidar com erros
-    });
+    return this.http.get('http://localhost/ChestRPGIonic/api/mesas.php', { withCredentials: true });
   }
 
   createTable(tableData: any): Observable<any> {
@@ -25,17 +20,14 @@ export class TablesService {
   }
 
   updateTable(tableId: number, tableData: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/mesas.php/${tableId}`, tableData);
+    return this.http.put(`${this.apiUrl}/mesas.php?idTable=${tableId}`, tableData);
   }
 
   deleteTable(tableId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/mesas.php/${tableId}`);
+    return this.http.delete(`${this.apiUrl}/mesas.php?idTable=${tableId}`);
   }
 
   joinTable(code: string): Observable<any> {
-    // Adjust the API endpoint as needed
     return this.http.post(`${this.apiUrl}/joinMesas.php`, { codeTable: code });
   }
-
-  // Adicione mais métodos conforme necessário
 }

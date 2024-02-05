@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class LoginService {
 
-  private apiUrl = 'http://localhost/ChestRPGIonic/api';
+  private apiUrl = 'http://localhost/ChestRPGIonic/api/api_usuario.php';
 
   constructor(private http: HttpClient) { }
 
@@ -16,7 +16,7 @@ export class LoginService {
   }
 
   registerUser(user: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/cadastro.php`, user);
+    return this.http.post(`${this.apiUrl}/user`, user);
   }
 
   loginUser(username: string, password: string): Observable<any> {
@@ -25,7 +25,7 @@ export class LoginService {
       passwordUser: password
     };
   
-    return this.http.post(`${this.apiUrl}/login.php`, loginData);
+    return this.http.post(`${this.apiUrl}/login`, loginData);
   }
 
   logout(): void {

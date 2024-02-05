@@ -74,6 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($stmt->execute()) {
         $data->idUser = $con->insert_id;
+        $_SESSION['idUser'] = $data->idUser;
         http_response_code(201); // Código de status 201 (Created) para indicar sucesso no cadastro
         exit(json_encode($data));
     } else {
