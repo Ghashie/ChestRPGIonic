@@ -13,7 +13,7 @@ export class LoginPage {
   email: string = '';
   password: string = '';
 
-  constructor(private toastController: ToastController, private router: Router, private http: HttpClient) {}
+  constructor(private toastController: ToastController, private router: Router, private loginService: LoginService ,private http: HttpClient) {}
  
   async presentToast(message: string) {
     const toast = await this.toastController.create({
@@ -31,24 +31,23 @@ export class LoginPage {
       return;
     }
   
-    // Requisição para verificar o login
-    const loginData = {
-      emailUser: this.email,
-      passwordUser: this.password,
-    };
-  
-    this.http.get(`http://localhost/ChestRPGIonic/api/api_usuario.php?emailUser=${loginData.emailUser}&passwordUser=${loginData.passwordUser}`).subscribe(
+    this.loginService.loginUser(this.email, this.password).subscribe(
       (response: any) => {
-        // Verifica se a resposta está vazia (nenhum usuário encontrado)
         if (!response) {
           this.presentToast('Nenhum usuário encontrado. Verifique seu e-mail e senha.');
           return;
         }
   
-        // Verifica se a senha fornecida coincide com a senha armazenada (usando password_verify)
         if (response && response.error) {
           this.presentToast('Credenciais inválidas. Verifique seu e-mail e senha.');
         } else {
+          // Salve o token e outros dados do usuário no serviço de login
+          this.loginService.setUserData(response.token, response.user);
+
+          // Obtenha o ID do usuário armazenado para uso futuro
+          const userId = response.user.idUser;
+  
+          // Navegue para a página de mesas ou execute outra lógica necessária
           this.router.navigate(['/mesas']);
         }
       },

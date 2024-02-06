@@ -1,6 +1,9 @@
 <?php
 require_once 'headers.php';
 require_once 'conexao.php';
+require_once 'vendor/autoload.php';
+
+use Firebase\JWT\JWT;
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header('Access-Control-Allow-Origin: *');
@@ -33,7 +36,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         // Verifica a senha usando password_verify
         if ($data && isset($_GET['passwordUser'])) {
             if (password_verify($_GET['passwordUser'], $data['passwordUser'])) {
-                exit(json_encode($data));
+                $tokenData = [
+                  'idUser' => $data['idUser'],
+                  'usernameUser' => $data['usernameUser'],
+                  'emailUser' => $data['emailUser']
+                ];
+
+                $secretKey = "senac";
+                $token = JWT::encode($tokenData, $secretKey, 'HS256');
+
+                exit(json_encode(['token' => $token, 'user' => $data]));
             } else {
                 http_response_code(401); // Unauthorized
                 exit(json_encode(['error' => 'Credenciais inválidas']));
@@ -86,19 +98,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     parse_str(file_get_contents("php://input"), $putData);
 
-    if (isset($putData['idUser'])) {
-        $id = $con->real_escape_string($putData['idUser']);
-        $data = json_decode(file_get_contents("php://input"));
+    // Verifique a existência do token
+    $token = null;
+    $headers = apache_request_headers();
+    if (isset($headers['Authorization'])) {
+        $token = $headers['Authorization'];
+    }
 
-        // Use prepared statements para evitar SQL injection
-        $stmt = $con->prepare("UPDATE user SET nome = ?, emailUser = ?, passwordUser = ? WHERE idUser = ?");
-        $stmt->bind_param("sssi", $data->nome, $data->email, $data->password, $id);
+    if (!$token) {
+        http_response_code(401); // Unauthorized
+        exit(json_encode(['error' => 'Token ausente']));
+    }
 
-        if ($stmt->execute()) {
-            exit(json_encode(['status' => 'successo']));
-        } else {
-            exit(json_encode(['status' => 'Deu ruim']));
-        }
+    // Decodifique o token
+    $secretKey = "senac";
+    try {
+        $decoded = JWT::decode($token, $secretKey);
+        // Os dados do usuário estarão em $decoded
+    } catch (Exception $e) {
+        http_response_code(401); // Unauthorized
+        exit(json_encode(['error' => 'Token inválido', 'details' => $e->getMessage()]));
+    }
+
+    // Verifique se o ID do usuário no token corresponde ao ID enviado na requisição
+    if ($decoded->idUser != $putData['idUser']) {
+        http_response_code(403); // Forbidden
+        exit(json_encode(['error' => 'Usuário não autorizado a editar este perfil']));
+    }
+
+    // Continue com a lógica de atualização de perfil
+    $id = $con->real_escape_string($putData['idUser']);
+    $data = json_decode(file_get_contents("php://input"));
+
+    // Use prepared statements para evitar SQL injection
+    $stmt = $con->prepare("UPDATE user SET usernameUser = ?, emailUser = ? WHERE idUser = ?");
+    $stmt->bind_param("ssi", $data->username, $data->email, $id);
+
+    if ($stmt->execute()) {
+        exit(json_encode(['status' => 'successo']));
+    } else {
+        exit(json_encode(['status' => 'Deu ruim', 'db_error' => $con->error]));
     }
 }
 
