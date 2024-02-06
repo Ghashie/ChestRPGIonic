@@ -1,0 +1,20 @@
+ion-header {
+    ion-toolbar {
+      --background: #34495E;
+    }
+  
+    ion-title {
+      font-family: 'MedievalSharp', cursive;
+      color: white;
+     padding-left: 100px;
+    }
+  
+    ion-menu-button {
+      --color: white;
+    }
+  }
+  ion-content {
+    --background: #252730;
+  
+  }
+  
