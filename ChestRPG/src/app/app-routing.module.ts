@@ -34,12 +34,13 @@ const routes: Routes = [
   {
     path: 'juntar',
     loadChildren: () => import('./page/modal/juntar/juntar.module').then( m => m.JuntarPageModule)
-  },  {
+  },
+  {
     path: 'mesas',
     loadChildren: () => import('./page/mesas/mesas.module').then( m => m.MesasPageModule)
   },
   {
-    path: 'dentro-mesa',
+    path: 'dentro-mesa/:id',
     loadChildren: () => import('./page/dentro-mesa/dentro-mesa.module').then( m => m.DentroMesaPageModule)
   },
 

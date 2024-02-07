@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+ import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { CriarPage } from '../modal/criar/criar.page';
 import { JuntarPage } from '../modal/juntar/juntar.page';
 import { TablesService } from 'src/app/service/tables.service'; // Certifique-se de ajustar o caminho correto
+import { LoginService } from 'src/app/service/login.service';
+import { ChangeDetectorRef } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-mesas',
@@ -12,7 +15,7 @@ import { TablesService } from 'src/app/service/tables.service'; // Certifique-se
 export class MesasPage implements OnInit {
   mesas: any[] = [];  // Aqui você deve carregar a lista de mesas do seu serviço
 
-  constructor(private modalController: ModalController, private tablesService: TablesService) { }
+  constructor(private modalController: ModalController, private tablesService: TablesService, private router: Router, private loginService: LoginService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.carregarMesas();
@@ -33,15 +36,24 @@ export class MesasPage implements OnInit {
   }
 
   carregarMesas() {
-    // Aqui você deve chamar seu serviço para carregar a lista de mesas
     this.tablesService.getTables().subscribe((mesas) => {
       this.mesas = mesas;
     });
   }
 
   entrarNaMesa(mesa: any) {
-    // Lógica para entrar na mesa
+    console.log('Mesa selecionada:', mesa);
+    
+    // Verificar se idTable é válido
+    if (mesa && mesa.idTable) {
+      console.log('ID da mesa válido:', mesa.idTable);
+      // Navegar para dentro-mesa com os dados da mesa
+      this.router.navigate(['/dentro-mesa', mesa.idTable]);
+    } else {
+      console.error('ID da mesa inválido:', mesa);
+    }
   }
+  
 
   sairDaMesa(mesa: any) {
     // Lógica para sair da mesa

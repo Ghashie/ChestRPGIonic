@@ -29,11 +29,8 @@
           Código: {{ mesa.codeTable }}
         </ion-card-content>
 
-        <!-- Botões conforme o papel do usuário na mesa -->
-        <ion-button *ngIf="mesa.isCreator" (click)="editarMesa(mesa)">Editar</ion-button>
-        <ion-button (click)="entrarNaMesa(mesa)">Entrar</ion-button>
-        <ion-button *ngIf="mesa.isMember" (click)="sairDaMesa(mesa)">Sair</ion-button>
-        <ion-button *ngIf="mesa.isCreator" (click)="excluirMesa(mesa)">Excluir</ion-button>
+        <!-- Botão para entrar na mesa -->
+        <ion-button (click)="entrarNaMesa(mesa)">Entrar na Mesa</ion-button>
       </ion-card>
     </ion-list>
   </div>

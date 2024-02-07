@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,9 @@ export class TablesService {
   constructor(private http: HttpClient) { }
 
   getTables(): Observable<any> {
-    return this.http.get('http://localhost/ChestRPGIonic/api/mesas.php', { withCredentials: true });
+    return this.http.get(`${this.apiUrl}/mesas.php`);
   }
+
 
   createTable(tableData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/mesas.php`, tableData);
@@ -29,5 +31,11 @@ export class TablesService {
 
   joinTable(code: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/joinMesas.php`, { codeTable: code });
+  }
+
+  getDetalhesMesa(mesaId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/mesas.php?idTable=${mesaId}`).pipe(
+      map((response: any) => response[0]) // Tratar a resposta como um único objeto
+    );
   }
 }

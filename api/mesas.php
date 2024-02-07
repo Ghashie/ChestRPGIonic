@@ -14,16 +14,9 @@ require_once 'headers.php';
 require_once 'conexao.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $idUsuario = isset($_SESSION['idUser']) ? $_SESSION['idUser'] : null;
-
-    if (!$idUsuario) {
-        http_response_code(401);
-        exit(json_encode(['error' => 'Usuário não autenticado']));
-    }
-
     $sql = $con->query("SELECT t.*, m.idUser AS isMember, m.isAdmin AS isCreator
                        FROM tables t
-                       LEFT JOIN members m ON t.idTable = m.idTable AND m.idUser = '$idUsuario'");
+                       LEFT JOIN members m ON t.idTable = m.idTable");
     $data = [];
     while ($d = $sql->fetch_assoc()) {
         $data[] = $d;
